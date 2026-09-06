@@ -1,0 +1,45 @@
+# Environment & Secret variables
+.env
+.env.*
+!.env.sample
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyc
+.Python
+env/
+venv/
+.venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# whatsapp-web.js & Puppeteer sessions / caches
+**/.wwebjs_auth/
+**/.wwebjs_cache/
+.wwebjs_auth/
+.wwebjs_cache/
+**/session/
+**/lockfile
+
+# Logs & Temporary files
+*.log
+*.tmp
+*.temp
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
