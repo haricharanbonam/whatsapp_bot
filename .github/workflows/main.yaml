@@ -1,0 +1,21 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/your-app
+            git pull origin main
+            docker build -t whatsapp-bot .
+            docker stop whatsapp-bot || true
+            docker rm whatsapp-bot || true
+            docker run -d --name whatsapp-bot -p 3000:3000 --env-file .env whatsapp-bot
