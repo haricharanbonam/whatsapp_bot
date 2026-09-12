@@ -18,4 +18,4 @@ jobs:
             docker build -t whatsapp-bot .
             docker stop whatsapp-bot || true
             docker rm whatsapp-bot || true
-            docker run -d --name whatsapp-bot -p 3000:3000 --env-file .env whatsapp-bot
+            docker run -d --name whatsapp-bot -p 3000:8000 --env-file .env whatsapp-bot
