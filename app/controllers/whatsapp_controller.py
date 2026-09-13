@@ -7,7 +7,7 @@ router = APIRouter(prefix="/whatsapp", tags=["WhatsApp"])
 @router.post("/webhook")
 async def whatsapp_webhook(Body: str = Form(...), From: str = Form(...)):
     user_msg = Body.strip()
-    reply_text = await generate_chat_response(user_text=user_msg, user_id=From)
+    reply_text = generate_chat_response(user_text=user_msg, user_id=From)
 
     twiml = MessagingResponse()
     twiml.message(reply_text)
@@ -24,5 +24,5 @@ class PersonalAIMessage(BaseModel):
 @router.post("/personal")
 async def handle_personal_ai(payload: PersonalAIMessage):
     # Reuses your existing ai_service.py logic!
-    reply = await generate_chat_response(user_text=payload.prompt, user_id=payload.sender)
+    reply = generate_chat_response(user_text=payload.prompt, user_id=payload.sender)
     return {"reply": reply}
