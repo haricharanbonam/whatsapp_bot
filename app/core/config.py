@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     GOOGLE_TOKEN_PATH: str = "token.json"
     GOOGLE_CALENDAR_ID: str = "primary"
     LEETCODE_USERNAME: str = ""
+    SCHEDULER_TIMEZONE: str = "Asia/Kolkata"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

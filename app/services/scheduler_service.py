@@ -4,7 +4,7 @@ from app.core.config import settings
 from app.integrations.calendar import fetch_daily_events, format_events_message
 from app.services.leetcode_service import fetch_activity, fetch_daily_question
 
-scheduler = AsyncIOScheduler()
+scheduler = AsyncIOScheduler(timezone=settings.SCHEDULER_TIMEZONE)
 
 async def scheduled_daily_tasks_job():
     try:
