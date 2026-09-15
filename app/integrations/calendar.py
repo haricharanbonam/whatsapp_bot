@@ -1,6 +1,7 @@
 import os
-from datetime import datetime, time, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Optional
+from zoneinfo import ZoneInfo
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -10,6 +11,7 @@ from googleapiclient.discovery import build
 from app.core.config import settings
 
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+TZ = ZoneInfo(settings.SCHEDULER_TIMEZONE)
 
 
 def _build_calendar_service():
@@ -46,16 +48,18 @@ def fetch_daily_events(date: Optional[str] = None) -> list[dict]:
     service = _build_calendar_service()
     if date:
         search_date = datetime.fromisoformat(date)
+        if search_date.tzinfo is None:
+            search_date = search_date.replace(tzinfo=TZ)
     else:
-        search_date = datetime.now()
+        search_date = datetime.now(TZ)
 
-    day_start = search_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    day_start = search_date.astimezone(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
     day_end = day_start + timedelta(days=1)
 
     result = (service.events().list(
         calendarId=settings.GOOGLE_CALENDAR_ID,
-        timeMin=day_start.isoformat() + "Z",
-        timeMax=day_end.isoformat() + "Z",
+        timeMin=day_start.isoformat(),
+        timeMax=day_end.isoformat(),
         singleEvents=True,
         orderBy="startTime",
     ).execute())

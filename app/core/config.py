@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     GOOGLE_CALENDAR_ID: str = "primary"
     LEETCODE_USERNAME: str = ""
     SCHEDULER_TIMEZONE: str = "Asia/Kolkata"
+    MONGO_URL: str = ""
+    MONGO_DB_NAME: str = "WhatsappBot"
+    REMINDER_POLL_INTERVAL_MINUTES: int = 5
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

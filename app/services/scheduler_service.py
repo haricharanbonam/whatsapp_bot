@@ -2,6 +2,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from app.services.twilio_service import send_whatsapp_message
 from app.core.config import settings
 from app.integrations.calendar import fetch_daily_events, format_events_message
+from app.integrations.reminders import get_due_reminders, mark_reminder_sent
 from app.services.leetcode_service import fetch_activity, fetch_daily_question
 
 scheduler = AsyncIOScheduler(timezone=settings.SCHEDULER_TIMEZONE)
@@ -69,6 +70,18 @@ async def send_solve_reminder(slot: str):
     except Exception as e:
         print(f"LeetCode reminder job error: {e}")
 
+async def check_and_send_reminders():
+    try:
+        reminders = get_due_reminders()
+        for reminder in reminders:
+            send_whatsapp_message(
+                to_number=settings.MY_WHATSAPP_NUMBER,
+                body=f"⏰ Reminder: {reminder['text']}"
+            )
+            mark_reminder_sent(reminder["_id"])
+    except Exception as e:
+        print(f"Reminder poller error: {e}")
+
 def start_scheduler():
     scheduler.add_job(
         scheduled_daily_tasks_job,
@@ -111,6 +124,13 @@ def start_scheduler():
         minute=0,
         args=["night"],
         id="leetcode_reminder_night",
+        replace_existing=True,
+    )
+    scheduler.add_job(
+        check_and_send_reminders,
+        "interval",
+        minutes=settings.REMINDER_POLL_INTERVAL_MINUTES,
+        id="reminder_poller",
         replace_existing=True,
     )
     scheduler.start()
