@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     SCHEDULER_TIMEZONE: str = "Asia/Kolkata"
     MONGO_URL: str = ""
     MONGO_DB_NAME: str = "WhatsappBot"
-    REMINDER_POLL_INTERVAL_MINUTES: int = 5
+    REMINDER_POLL_INTERVAL_MINUTES: int = 1
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
