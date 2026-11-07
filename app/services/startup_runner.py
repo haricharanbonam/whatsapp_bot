@@ -1,15 +1,15 @@
 from app.services.scheduler_service import (
-    scheduled_daily_tasks_job,
+    scheduled_daily_9am_paid_burst_job,
     send_daily_challenge,
     send_solve_reminder,
+    send_daily_mern_job,
+    send_daily_sql_job,
 )
 
 
 async def run_once_updates():
-    """Run calendar, LeetCode daily, and LeetCode streak checks once on startup.
-
-    Intended for testing regardless of the scheduled times.
-    """
-    await scheduled_daily_tasks_job()
-    await send_daily_challenge()
-    await send_solve_reminder("noon")
+    """Run initial test checks once on startup if needed."""
+    try:
+        await scheduled_daily_9am_paid_burst_job()
+    except Exception as e:
+        print(f"[startup_runner] Notice: {e}")
